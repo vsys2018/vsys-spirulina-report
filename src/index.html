@@ -79,9 +79,7 @@
                   <th>Nhiệt độ (°C)</th>
                   <th>Độ mặn (PSU)</th>
                   <th>PH</th>
-                  <th>ORP</th>
                   <th>Mật độ (g/l)</th>
-                  <th>Màu tảo</th>
                 </tr>
               </thead>
               <tfoot style="width: 100%">
@@ -91,9 +89,7 @@
                   <th>Nhiệt độ (°C)</th>
                   <th>Độ mặn (PSU)</th>
                   <th>PH</th>
-                  <th>ORP</th>
                   <th>Mật độ (g/l)</th>
-                  <th>Màu tảo</th>
                 </tr>
               </tfoot>
               <tbody></tbody>
@@ -197,22 +193,7 @@
             { data: "c3", defaultContent: "___" },
             { data: "c4", defaultContent: "___" },
             { data: "c5", defaultContent: "___" },
-            { data: "c6", defaultContent: "___" },
-            { data: "c7", defaultContent: "___" },
-            {
-              data: "c8",
-              defaultContent: "___",
-              render: function(data, type, row) {
-                var color = "black";
-                if (data) {
-                  if (data.startsWith("x")) color = "#" + data.substring(1);
-                } else data = "___";
-
-                return (
-                  '<div style="padding: 5px 10px; background:' + color + '">' + data + "</div>"
-                );
-              }
-            }
+            { data: "c7", defaultContent: "___" }
           ],
           processing: true
         });
