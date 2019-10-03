@@ -189,11 +189,29 @@
                 return timeformat(data);
               }
             },
-            { data: "c2", defaultContent: "___" },
-            { data: "c3", defaultContent: "___" },
-            { data: "c4", defaultContent: "___" },
-            { data: "c5", defaultContent: "___" },
-            { data: "c7", defaultContent: "___" }
+            { data: "c2", defaultContent: "-" }, // Be nuoi
+            { data: "c3", defaultContent: "-" }, // Nhiet do
+            {
+              data: "c4",
+              defaultContent: "-",
+              render: (data, type, row) => {
+                return data && data !== 0 ? data : "-";
+              }
+            }, // Do man
+            {
+              data: "c5",
+              defaultContent: "-",
+              render: (data, type, row) => {
+                return row.c4 && row.c4 !== 0 ? data : "-";
+              }
+            }, // PH
+            {
+              data: "c7",
+              defaultContent: "-",
+              render: (data, type, row) => {
+                return row.c4 && row.c4 !== 0 ? data : "-";
+              }
+            } // Mat do
           ],
           processing: true
         });
