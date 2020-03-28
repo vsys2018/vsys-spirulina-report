@@ -80,6 +80,7 @@
                   <th>Độ mặn (PSU)</th>
                   <th>PH</th>
                   <th>Mật độ (g/l)</th>
+                  <th>Trạng thái điện 220V</th>
                 </tr>
               </thead>
               <tfoot style="width: 100%">
@@ -90,6 +91,7 @@
                   <th>Độ mặn (PSU)</th>
                   <th>PH</th>
                   <th>Mật độ (g/l)</th>
+                  <th>Trạng thái điện 220V</th>
                 </tr>
               </tfoot>
               <tbody></tbody>
@@ -122,7 +124,10 @@
           return total;
         };
 
-        const formatter = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
+        const formatter = new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND"
+        });
         const timeformat = date => {
           const now = new Date(date),
             yyyy = now.getFullYear(),
@@ -133,15 +138,29 @@
           const twoDigit = dg => {
             return dg < 10 ? "0" + dg : dg;
           };
-          return `${twoDigit(dd)}/${twoDigit(MM)}/${yyyy} ${twoDigit(hh)}:${twoDigit(mm)}`;
+          return `${twoDigit(dd)}/${twoDigit(MM)}/${yyyy} ${twoDigit(
+            hh
+          )}:${twoDigit(mm)}`;
         };
 
-        const beginMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-        const currentTimeString = new Date().toISOString().replace(/T(.+)Z/, "T16:59:59Z");
+        const beginMonth = new Date(
+          new Date().getFullYear(),
+          new Date().getMonth(),
+          1
+        );
+        const currentTimeString = new Date()
+          .toISOString()
+          .replace(/T(.+)Z/, "T16:59:59Z");
         const currentTime = new Date(currentTimeString);
 
-        const dt1from = $("#dtp-01-from").datetimepicker({ locale: "vi", defaultDate: beginMonth });
-        const dt1to = $("#dtp-01-to").datetimepicker({ locale: "vi", defaultDate: currentTime });
+        const dt1from = $("#dtp-01-from").datetimepicker({
+          locale: "vi",
+          defaultDate: beginMonth
+        });
+        const dt1to = $("#dtp-01-to").datetimepicker({
+          locale: "vi",
+          defaultDate: currentTime
+        });
 
         let vietnamese = {
           sProcessing: "Đang xử lý...",
@@ -176,7 +195,10 @@
           ],
           language: vietnamese,
           pageLength: 10,
-          lengthMenu: [[6, 10, 25, 50, -1], [6, 10, 25, 50, "All"]],
+          lengthMenu: [
+            [6, 10, 25, 50, -1],
+            [6, 10, 25, 50, "All"]
+          ],
           dom:
             "<'row be-datatable-header'<'col-sm-6'l><'col-sm-6'B>>" +
             "<'row be-datatable-body'<'col-sm-12'tr>>" +
@@ -195,23 +217,32 @@
               data: "c4",
               defaultContent: "-",
               render: (data, type, row) => {
-                return data && data !== 0 ? data : "-";
+                return data && data >= 1 ? data : "-";
               }
             }, // Do man
             {
               data: "c5",
               defaultContent: "-",
               render: (data, type, row) => {
-                return row.c4 && row.c4 !== 0 ? data : "-";
+                return row.c4 && row.c4 >= 1 ? data : "-";
               }
             }, // PH
             {
               data: "c7",
               defaultContent: "-",
               render: (data, type, row) => {
-                return row.c4 && row.c4 !== 0 ? data : "-";
+                return row.c4 && row.c4 >= 1
+                  ? parseFloat(data).toFixed(2)
+                  : "-";
               }
-            } // Mat do
+            }, // Mat do
+            {
+              data: "c9",
+              defaultContent: "-",
+              render: (data, type, row) => {
+                return data ? data : "-";
+              }
+            } // Trang thai dien 220V
           ],
           processing: true
         });
@@ -242,24 +273,30 @@
                   var column = this;
                   var col = column.eq(0)[0];
                   if (col == 0) {
-                    $('<select class="form-control" disabled></select>').appendTo(
-                      $(column.footer()).empty()
-                    );
+                    $(
+                      '<select class="form-control" disabled></select>'
+                    ).appendTo($(column.footer()).empty());
                   } else {
                     var select = $(
                       '<select class="form-control"><option value=""></option></select>'
                     )
                       .appendTo($(column.footer()).empty())
                       .on("change", function() {
-                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                        let search = column.search(val ? "^" + val + "$" : "", true, false).draw();
+                        var val = $.fn.dataTable.util.escapeRegex(
+                          $(this).val()
+                        );
+                        let search = column
+                          .search(val ? "^" + val + "$" : "", true, false)
+                          .draw();
                       });
                     column
                       .data()
                       .unique()
                       .sort()
                       .each(function(d, j) {
-                        select.append('<option value="' + d + '">' + d + "</option>");
+                        select.append(
+                          '<option value="' + d + '">' + d + "</option>"
+                        );
                       });
                   }
                 });
